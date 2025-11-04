@@ -1,6 +1,3 @@
-ALTER TABLE products
-ADD COLUMN currency VARCHAR(10) DEFAULT 'USD';
-
 
 -- 1. Total Sales Revenue by Product Category
 SELECT c.category_name, sum(s.quantity * p.price) as total_revenue
@@ -9,6 +6,7 @@ JOIN products p on s.product_id = p.product_id
 JOIN category c on p.category_id = c.category_id
 GROUP BY c.category_name
 ORDER BY total_revenue DESC;
+
 
 -- 2. Top 5 Best-Selling Products
 SELECT 
@@ -20,6 +18,7 @@ GROUP BY p.product_name
 ORDER BY total_units_sold DESC
 LIMIT 5;
 
+
 -- 3. Monthly Revenue Trend
 SELECT 
     DATE_TRUNC('month', s.sale_date) AS month,
@@ -29,6 +28,7 @@ FROM sales s
 JOIN products p ON s.product_id = p.product_id
 GROUP BY month
 ORDER BY month;
+
 
 -- 4. Total Revenue by Store
 SELECT 
@@ -40,6 +40,7 @@ JOIN products p ON s.product_id = p.product_id
 GROUP BY st.store_name
 ORDER BY store_revenue DESC;
 
+
 -- 5.Average Product Price by Category
 SELECT 
     c.category_name,
@@ -48,12 +49,14 @@ FROM products p
 JOIN category c ON p.category_id = c.category_id
 GROUP BY c.category_name;
 
+
 -- 6. Products Never Sold
 SELECT 
     p.product_name
 FROM products p
 LEFT JOIN sales s ON p.product_id = s.product_id
 WHERE s.sale_id IS NULL;
+
 
 -- 7.Stores with the Highest Warranty Claims
 SELECT 
@@ -66,6 +69,7 @@ GROUP BY st.store_name
 ORDER BY total_claims DESC
 LIMIT 3;
 
+
 -- 8. Product with the Most Warranty Claims
 SELECT 
     p.product_name,
@@ -76,6 +80,7 @@ JOIN products p ON s.product_id = p.product_id
 GROUP BY p.product_name
 ORDER BY claim_count DESC
 LIMIT 1;
+
 
 -- 9. Top Performing Product by Each Store (Window Function)
 SELECT store_name, product_name, total_sales
@@ -91,6 +96,7 @@ FROM (
     GROUP BY st.store_name, p.product_name, st.store_id
 ) ranked
 WHERE rnk = 1;
+
 
 -- 10. Category Contribution to Total Revenue
 WITH total AS (
